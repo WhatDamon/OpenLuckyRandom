@@ -1,4 +1,4 @@
-# <img src="assets/OpenLuckyRandom.png" width="32" height="32"/> OpenLuckyRandom
+# <img src="assets/openluckyrandom.png" width="32" height="32"/> OpenLuckyRandom
 
 ![GitHub top language](https://img.shields.io/github/languages/top/WhatDamon/OpenLuckyRandom)
 ![GitHub Release](https://img.shields.io/github/v/release/WhatDamon/OpenLuckyRandom)

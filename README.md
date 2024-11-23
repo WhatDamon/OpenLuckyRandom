@@ -18,6 +18,7 @@
 ## 截图
 
 ![主窗口](./screenshots/WndMain.png)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_shield)
 
 *注: OBS Virtual Camera 正在播放的视频来自[此处](https://www.bilibili.com/video/BV1ex411P7Kc) (本项目仅使用该视频用于测试，与本程序无关)*
 
@@ -38,3 +39,6 @@
 ## 许可证
 
 本项目使用 **Apache 2.0** 许可证开源，OpenCV 可能还是用了使用 LGPL 的许可证开源的程序
+
+## License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_large)

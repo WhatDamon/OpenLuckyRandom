@@ -1,4 +1,15 @@
-# OpenLuckyRandom
+# <img src="assets/OpenLuckyRandom.png" width="32" height="32"/> OpenLuckyRandom
+
+![GitHub top language](https://img.shields.io/github/languages/top/WhatDamon/OpenLuckyRandom)
+![GitHub Release](https://img.shields.io/github/v/release/WhatDamon/OpenLuckyRandom)
+![GitHub Downloads](https://img.shields.io/github/downloads/WhatDamon/OpenLuckyRandom/total)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/t/WhatDamon/OpenLuckyRandom)
+![GitHub Issues](https://img.shields.io/github/issues/WhatDamon/OpenLuckyRandom)
+![GitHub Pull Requests](https://img.shields.io/github/issues-pr/WhatDamon/OpenLuckyRandom)
+![GitHub repo size](https://img.shields.io/github/repo-size/WhatDamon/OpenLuckyRandom)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_shield)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=shield&issueType=security)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_shield&issueType=security)
+
 
 启发于某沃一体机中的 LuckyRandom 人脸识别随机抽人，使用 WinForms 开发的玩具
 
@@ -38,3 +49,5 @@
 ## 许可证
 
 本项目使用 **Apache 2.0** 许可证开源，OpenCV 可能还是用了使用 LGPL 的许可证开源的程序
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_large)

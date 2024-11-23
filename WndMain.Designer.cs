@@ -51,11 +51,11 @@
             machineStatusLabel = new ToolStripStatusLabel();
             captureTimer = new System.Windows.Forms.Timer(components);
             infoGroupBox = new GroupBox();
+            announcingLabel = new Label();
             faceRecogStatusLabel = new Label();
             machineStatusTimer = new System.Windows.Forms.Timer(components);
             randomBtn = new Button();
             backBtn = new Button();
-            announcingLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)cameraCurrent).BeginInit();
             configGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)frameThicknessNum).BeginInit();
@@ -273,6 +273,15 @@
             infoGroupBox.TabStop = false;
             infoGroupBox.Text = "信息";
             // 
+            // announcingLabel
+            // 
+            announcingLabel.AutoSize = true;
+            announcingLabel.Location = new Point(6, 71);
+            announcingLabel.Name = "announcingLabel";
+            announcingLabel.Size = new Size(370, 120);
+            announcingLabel.TabIndex = 1;
+            announcingLabel.Text = "头抬起，是的，你正在成功！\r\n做轰！擦-擦-擦！推推\r\n看摄像头，请坐和放宽，不要如此激动\r\n按下功率，你正在成功，不用滚回以前的版本\r\n好东西就要来了\r\n";
+            // 
             // faceRecogStatusLabel
             // 
             faceRecogStatusLabel.AutoSize = true;
@@ -313,15 +322,6 @@
             backBtn.UseVisualStyleBackColor = true;
             backBtn.Click += backBtn_Click;
             // 
-            // announcingLabel
-            // 
-            announcingLabel.AutoSize = true;
-            announcingLabel.Location = new Point(6, 71);
-            announcingLabel.Name = "announcingLabel";
-            announcingLabel.Size = new Size(370, 120);
-            announcingLabel.TabIndex = 1;
-            announcingLabel.Text = "头抬起，是的，你正在成功！\r\n做轰！擦-擦-擦！推推\r\n看摄像头，请坐和放宽，不要如此激动\r\n按下功率，你正在成功，不用滚回以前的版本\r\n好东西就要来了\r\n";
-            // 
             // WndMain
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
@@ -334,8 +334,10 @@
             Controls.Add(configGroupBox);
             Controls.Add(cameraCurrent);
             FormBorderStyle = FormBorderStyle.FixedDialog;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MaximizeBox = false;
             Name = "WndMain";
+            ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
             Text = "OpenLuckyRandom";
             FormClosing += WndMain_FormClosing;

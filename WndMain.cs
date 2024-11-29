@@ -36,14 +36,23 @@ namespace OpenLuckyRandom
         private void CameraDevicesLoad()
         {
             cameraComboBox.Items.Clear();
+            bool _cameraFound = false;
             foreach (var i in FindCamera.EnumDevices.Devices)
             {
                 // 添加设备名称到下拉列表
                 cameraComboBox.Items.Add(i);
+
+                // 检查是否找到特定摄像头
+                if (i.ToString() == "Smart Camera" || _cameraFound == false) // 希沃一体机顶部摄像头名称为Smart Camera
+                {
+                    cameraComboBox.SelectedItem = i;
+                    _cameraFound = true;
+                }
             }
             if (cameraComboBox.Items.Count == 0)
             {
                 currentStatusLabel.Text = "未找到摄像头";
+                cameraComboBox.Enabled = false;
             }
             else
             {

@@ -51,7 +51,6 @@
             machineStatusLabel = new ToolStripStatusLabel();
             captureTimer = new System.Windows.Forms.Timer(components);
             infoGroupBox = new GroupBox();
-            announcingLabel = new Label();
             faceRecogStatusLabel = new Label();
             machineStatusTimer = new System.Windows.Forms.Timer(components);
             randomBtn = new Button();
@@ -264,23 +263,13 @@
             // 
             // infoGroupBox
             // 
-            infoGroupBox.Controls.Add(announcingLabel);
             infoGroupBox.Controls.Add(faceRecogStatusLabel);
             infoGroupBox.Location = new Point(699, 603);
             infoGroupBox.Name = "infoGroupBox";
-            infoGroupBox.Size = new Size(383, 198);
+            infoGroupBox.Size = new Size(707, 85);
             infoGroupBox.TabIndex = 3;
             infoGroupBox.TabStop = false;
             infoGroupBox.Text = "信息";
-            // 
-            // announcingLabel
-            // 
-            announcingLabel.AutoSize = true;
-            announcingLabel.Location = new Point(6, 71);
-            announcingLabel.Name = "announcingLabel";
-            announcingLabel.Size = new Size(370, 120);
-            announcingLabel.TabIndex = 1;
-            announcingLabel.Text = "头抬起，是的，你正在成功！\r\n做轰！擦-擦-擦！推推\r\n看摄像头，请坐和放宽，不要如此激动\r\n按下功率，你正在成功，不用滚回以前的版本\r\n好东西就要来了\r\n";
             // 
             // faceRecogStatusLabel
             // 
@@ -303,9 +292,9 @@
             randomBtn.Enabled = false;
             randomBtn.Font = new Font("Microsoft YaHei UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 134);
             randomBtn.ForeColor = SystemColors.Highlight;
-            randomBtn.Location = new Point(1088, 603);
+            randomBtn.Location = new Point(879, 694);
             randomBtn.Name = "randomBtn";
-            randomBtn.Size = new Size(318, 146);
+            randomBtn.Size = new Size(527, 107);
             randomBtn.TabIndex = 4;
             randomBtn.Text = "开始抽选";
             randomBtn.UseVisualStyleBackColor = true;
@@ -314,9 +303,9 @@
             // backBtn
             // 
             backBtn.Enabled = false;
-            backBtn.Location = new Point(1088, 755);
+            backBtn.Location = new Point(699, 694);
             backBtn.Name = "backBtn";
-            backBtn.Size = new Size(318, 46);
+            backBtn.Size = new Size(174, 107);
             backBtn.TabIndex = 5;
             backBtn.Text = "返回";
             backBtn.UseVisualStyleBackColor = true;
@@ -381,6 +370,5 @@
         private NumericUpDown frameThicknessNum;
         private Button backBtn;
         private Label frameThicknessWarningLabel;
-        private Label announcingLabel;
     }
 }

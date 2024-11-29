@@ -1,4 +1,11 @@
-﻿using System;
+﻿/*
+ * OpenLuckyRandom by @WhatDamon
+ * Licensed under Apache License 2.0
+ * Copyright © 2024-present Damon Lu
+ * https://github.com/WhatDamon/OpenLuckyRandom
+*/
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,6 +19,7 @@ namespace OpenLuckyRandom
 {
     internal class FindCamera
     {
+        // 枚举摄像头，代码源于 https://www.cnblogs.com/ives/p/18569933
         public class EnumDevices
         {
             /// <summary>

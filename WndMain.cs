@@ -1,3 +1,10 @@
+ï»¿/*
+ * OpenLuckyRandom by @WhatDamon
+ * Licensed under Apache License 2.0
+ * Copyright Â© 2024-present Damon Lu
+ * https://github.com/WhatDamon/OpenLuckyRandom
+*/
+
 using System;
 using System.ComponentModel;
 using System.IO;
@@ -13,7 +20,7 @@ namespace OpenLuckyRandom
 {
     public partial class WndMain : Form
     {
-        // ³õÊ¼»¯
+        // åˆå§‹åŒ–
         private VideoCapture capture;
         private Mat frame = new Mat();
         private CascadeClassifier faceCascade;
@@ -31,26 +38,26 @@ namespace OpenLuckyRandom
             CameraDevicesLoad();
             LoadFaceCascade(cascadeFiles[0]);
 
-            // ³õÊ¼»¯ĞÔÄÜ¼ÆÊıÆ÷
+            // åˆå§‹åŒ–æ€§èƒ½è®¡æ•°å™¨
             cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
 
-            // ×é¼şÖµ¶¨Òå
+            // ç»„ä»¶å€¼å®šä¹‰
             frameThicknessNum.Value = frameThickness;
             cascadesComboBox.SelectedIndex = 0;
         }
 
-        // ¼ÓÔØÉãÏñÍ·Éè±¸
+        // åŠ è½½æ‘„åƒå¤´è®¾å¤‡
         private void CameraDevicesLoad()
         {
             cameraComboBox.Items.Clear();
             bool _cameraFound = false;
             foreach (var i in FindCamera.EnumDevices.Devices)
             {
-                // Ìí¼ÓÉè±¸Ãû³Æµ½ÏÂÀ­ÁĞ±í
+                // æ·»åŠ è®¾å¤‡åç§°åˆ°ä¸‹æ‹‰åˆ—è¡¨
                 cameraComboBox.Items.Add(i);
 
-                // ¼ì²éÊÇ·ñÕÒµ½ÌØ¶¨ÉãÏñÍ·
-                if (i.ToString() == "Smart Camera" || _cameraFound == false) // Ï£ÎÖÒ»Ìå»ú¶¥²¿ÉãÏñÍ·Ãû³ÆÎªSmart Camera
+                // æ£€æŸ¥æ˜¯å¦æ‰¾åˆ°ç‰¹å®šæ‘„åƒå¤´
+                if (i.ToString() == "Smart Camera" || _cameraFound == false) // å¸Œæ²ƒä¸€ä½“æœºé¡¶éƒ¨æ‘„åƒå¤´åç§°ä¸ºSmart Camera
                 {
                     cameraComboBox.SelectedItem = i;
                     _cameraFound = true;
@@ -58,20 +65,20 @@ namespace OpenLuckyRandom
             }
             if (cameraComboBox.Items.Count == 0)
             {
-                currentStatusLabel.Text = "Î´ÕÒµ½ÉãÏñÍ·";
+                currentStatusLabel.Text = "æœªæ‰¾åˆ°æ‘„åƒå¤´";
                 cameraComboBox.Enabled = false;
             }
             else
             {
-                cameraComboBox.SelectedIndex = 0;  // Ä¬ÈÏÑ¡ÔñµÚÒ»¸ö
-                currentStatusLabel.Text = "¾ÍĞ÷";
+                cameraComboBox.SelectedIndex = 0;  // é»˜è®¤é€‰æ‹©ç¬¬ä¸€ä¸ª
+                currentStatusLabel.Text = "å°±ç»ª";
             }
         }
 
-        // ¼ÓÔØÈËÁ³¼¶Áª·ÖÀàÆ÷
+        // åŠ è½½äººè„¸çº§è”åˆ†ç±»å™¨
         private void LoadFaceCascade(string fileName)
         {
-            // ÊÍ·ÅÖ®Ç°µÄ CascadeClassifier ÊµÀı
+            // é‡Šæ”¾ä¹‹å‰çš„ CascadeClassifier å®ä¾‹
             if (faceCascade != null)
             {
                 faceCascade.Dispose();
@@ -85,26 +92,26 @@ namespace OpenLuckyRandom
                 faceCascade = new CascadeClassifier(xmlPath);
                 if (faceCascade.Empty())
                 {
-                    currentStatusLabel.Text = $"ÈËÁ³¼¶Áª·ÖÀàÆ÷ {fileName} ¼ÓÔØÊ§°Ü";
+                    currentStatusLabel.Text = $"äººè„¸çº§è”åˆ†ç±»å™¨ {fileName} åŠ è½½å¤±è´¥";
                 }
                 else
                 {
-                    currentStatusLabel.Text = $"³É¹¦¼ÓÔØÈËÁ³¼¶Áª·ÖÀàÆ÷: {fileName}";
+                    currentStatusLabel.Text = $"æˆåŠŸåŠ è½½äººè„¸çº§è”åˆ†ç±»å™¨: {fileName}";
                 }
             }
             catch (Exception ex)
             {
-                currentStatusLabel.Text = $"¼ÓÔØÈËÁ³¼¶Áª·ÖÀàÆ÷Ê±·¢Éú´íÎó: {ex.Message}";
+                currentStatusLabel.Text = $"åŠ è½½äººè„¸çº§è”åˆ†ç±»å™¨æ—¶å‘ç”Ÿé”™è¯¯: {ex.Message}";
             }
         }
 
-        // ¼¶Áª·ÖÀàÆ÷ĞŞ¸Ä
+        // çº§è”åˆ†ç±»å™¨ä¿®æ”¹
         private void cascadesComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             LoadFaceCascade(cascadeFiles[cascadesComboBox.SelectedIndex]);
         }
 
-        // µã»÷Ë¢ĞÂÉãÏñÍ·°´Å¥
+        // ç‚¹å‡»åˆ·æ–°æ‘„åƒå¤´æŒ‰é’®
         private void refreshCameraBtn_Click(object sender, EventArgs e)
         {
             CameraDevicesLoad();
@@ -112,42 +119,42 @@ namespace OpenLuckyRandom
 
         private void InitializeCapture(int cameraIndex)
         {
-            // ÊÍ·Å¾ÉµÄÉãÏñÍ·×ÊÔ´
+            // é‡Šæ”¾æ—§çš„æ‘„åƒå¤´èµ„æº
             if (capture != null)
             {
                 capture.Release();
                 capture = null;
             }
 
-            // ³õÊ¼»¯ĞÂµÄÉãÏñÍ·
+            // åˆå§‹åŒ–æ–°çš„æ‘„åƒå¤´
             capture = new VideoCapture(cameraIndex);
             if (!capture.IsOpened())
             {
-                currentStatusLabel.Text = "ÎŞ·¨´ò¿ªÉãÏñÍ·";
+                currentStatusLabel.Text = "æ— æ³•æ‰“å¼€æ‘„åƒå¤´";
                 return;
             }
             else
             {
-                currentStatusLabel.Text = "¾ÍĞ÷";
+                currentStatusLabel.Text = "å°±ç»ª";
             }
 
-            // Æô¶¯¼ÆÊ±Æ÷
+            // å¯åŠ¨è®¡æ—¶å™¨
             captureTimer.Start();
         }
 
-        // ÉãÏñÍ·Ñ¡Ôñ¸ü¸Ä
+        // æ‘„åƒå¤´é€‰æ‹©æ›´æ”¹
         private void cameraComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             InitializeCapture(cameraComboBox.SelectedIndex);
         }
 
-        // µã»÷Ó¦ÓÃ¼ÆÊ±Æ÷°´Å¥
+        // ç‚¹å‡»åº”ç”¨è®¡æ—¶å™¨æŒ‰é’®
         private void applyTimerIntervalBtn_Click(object sender, EventArgs e)
         {
             captureTimer.Interval = Convert.ToInt32(timerIntervalNum.Value);
         }
 
-        // µã»÷±ß¿òºñ¶È°´Å¥
+        // ç‚¹å‡»è¾¹æ¡†åšåº¦æŒ‰é’®
         private void applyframeThicknessBtn_Click(object sender, EventArgs e)
         {
             frameThickness = Convert.ToInt32(frameThicknessNum.Value);
@@ -155,104 +162,104 @@ namespace OpenLuckyRandom
 
         private void captureTimer_Tick(object sender, EventArgs e)
         {
-            // ¼ì²é faceCascade ÊÇ·ñÒÑÕıÈ·¼ÓÔØ
+            // æ£€æŸ¥ faceCascade æ˜¯å¦å·²æ­£ç¡®åŠ è½½
             if (faceCascade == null || faceCascade.Empty())
             {
-                currentStatusLabel.Text = "ÈËÁ³¼¶Áª·ÖÀàÆ÷Î´¼ÓÔØ";
+                currentStatusLabel.Text = "äººè„¸çº§è”åˆ†ç±»å™¨æœªåŠ è½½";
                 return;
             }
 
-            // ´ÓÉãÏñÍ·¶ÁÈ¡Ò»Ö¡Í¼Ïñ
+            // ä»æ‘„åƒå¤´è¯»å–ä¸€å¸§å›¾åƒ
             capture.Read(frame);
             if (frame.Empty())
             {
-                currentStatusLabel.Text = "ÎŞ·¨¶ÁÈ¡ÉãÏñÍ·Êı¾İ";
-                captureTimer.Stop(); // Í£Ö¹¼ÆÊ±Æ÷£¬·ÀÖ¹±¬ÄÚ´æ»òÕßCPU
+                currentStatusLabel.Text = "æ— æ³•è¯»å–æ‘„åƒå¤´æ•°æ®";
+                captureTimer.Stop(); // åœæ­¢è®¡æ—¶å™¨ï¼Œé˜²æ­¢çˆ†å†…å­˜æˆ–è€…CPU
                 return;
             }
 
-            using (Mat grayFrame = new Mat()) // ×ª»»Îª»Ò¶ÈÍ¼Ïñ
+            using (Mat grayFrame = new Mat()) // è½¬æ¢ä¸ºç°åº¦å›¾åƒ
             {
                 Cv2.CvtColor(frame, grayFrame, ColorConversionCodes.BGR2GRAY);
 
-                // ¼ì²âÈËÁ³
+                // æ£€æµ‹äººè„¸
                 Rect[] faces = faceCascade.DetectMultiScale(grayFrame, 1.1, 10);
 
-                // ÔÚÔ­Í¼ÉÏ»­¾ØĞÎ¿ò
+                // åœ¨åŸå›¾ä¸Šç”»çŸ©å½¢æ¡†
                 foreach (Rect face in faces)
                 {
                     Cv2.Rectangle(frame, face, Scalar.Red, frameThickness);
                 }
 
-                // ¸üĞÂ×´Ì¬±êÇ©
+                // æ›´æ–°çŠ¶æ€æ ‡ç­¾
                 if (faces.Length > 0)
                 {
-                    faceRecogStatusLabel.Text = $"¼ì²âµ½ {faces.Length} ¸öÈËÁ³";
+                    faceRecogStatusLabel.Text = $"æ£€æµ‹åˆ° {faces.Length} ä¸ªäººè„¸";
                     randomBtn.Enabled = true;
                 }
                 else
                 {
-                    faceRecogStatusLabel.Text = "Î´Ê¶±ğµ½ÈËÁ³";
+                    faceRecogStatusLabel.Text = "æœªè¯†åˆ«åˆ°äººè„¸";
                     randomBtn.Enabled = false;
                 }
             }
 
-            // ½«Mat×ª»»ÎªBitmap£¬²¢ÏÔÊ¾ÔÚPictureBoxÖĞ
+            // å°†Matè½¬æ¢ä¸ºBitmapï¼Œå¹¶æ˜¾ç¤ºåœ¨PictureBoxä¸­
             cameraCurrent.Image = frame.ToBitmap();
         }
 
-        // ´°¿Ú¹Ø±Õ
+        // çª—å£å…³é—­
         private void WndMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // Í£Ö¹¶¨Ê±Æ÷
+            // åœæ­¢å®šæ—¶å™¨
             if (captureTimer != null)
             {
                 captureTimer.Stop();
                 captureTimer.Dispose();
             }
 
-            // ÊÍ·ÅÉãÏñÍ·×ÊÔ´
+            // é‡Šæ”¾æ‘„åƒå¤´èµ„æº
             if (capture != null)
             {
                 capture.Release();
             }
 
-            // ÊÍ·Å¼¶Áª·ÖÀàÆ÷×ÊÔ´
+            // é‡Šæ”¾çº§è”åˆ†ç±»å™¨èµ„æº
             if (faceCascade != null)
             {
                 faceCascade.Dispose();
             }
         }
 
-        // µã»÷Ëæ»ú³éÑ¡°´Å¥
+        // ç‚¹å‡»éšæœºæŠ½é€‰æŒ‰é’®
         private void randomBtn_Click(object sender, EventArgs e)
         {
-            // ÔİÍ£¼ÆÊ±Æ÷
+            // æš‚åœè®¡æ—¶å™¨
             captureTimer.Stop();
 
-            // ×é¼ş¿ØÖÆ
+            // ç»„ä»¶æ§åˆ¶
             configGroupBox.Enabled = false;
             randomBtn.Enabled = false;
             backBtn.Enabled = true;
 
-            // ¼ì²âÈËÁ³
+            // æ£€æµ‹äººè„¸
             Mat grayFrame = new Mat();
             Cv2.CvtColor(frame, grayFrame, ColorConversionCodes.BGR2GRAY);
             Rect[] faces = faceCascade.DetectMultiScale(grayFrame, 1.1, 10);
 
             if (faces.Length > 0)
             {
-                // Ê¹ÓÃËæ»úÊıËã·¨È·¶¨Ñ¡ÔñÄÄ¸öÈË
+                // ä½¿ç”¨éšæœºæ•°ç®—æ³•ç¡®å®šé€‰æ‹©å“ªä¸ªäºº
                 Random rand = new Random();
                 int selectedFaceIndex = rand.Next(faces.Length);
                 Rect selectedFace = faces[selectedFaceIndex];
 
-                // Ç¿µ÷ĞÒÔË¶ù
+                // å¼ºè°ƒå¹¸è¿å„¿
                 frame.ConvertTo(frame, MatType.CV_8UC3);
                 Cv2.Rectangle(frame, selectedFace, new Scalar(150, 255, 150), frameThickness + 4);
                 Cv2.Rectangle(frame, selectedFace, Scalar.Green, frameThickness - 1);
 
-                // »æÖÆÀ¶É«¼ıÍ·
+                // ç»˜åˆ¶è“è‰²ç®­å¤´
                 OpenCvSharp.Point endPoint = new OpenCvSharp.Point(selectedFace.X + selectedFace.Width / 2, selectedFace.Y - 20);
                 OpenCvSharp.Point startPoint = new OpenCvSharp.Point(endPoint.X, endPoint.Y - Math.Max(selectedFace.Height / 2, 50));
 
@@ -271,62 +278,62 @@ namespace OpenLuckyRandom
                 Cv2.Line(frame, endPoint, leftTip, new Scalar(255, 0, 119, 215), frameThickness);
                 Cv2.Line(frame, endPoint, rightTip, new Scalar(255, 0, 119, 215), frameThickness);
 
-                // ÏÔÊ¾½á¹û
+                // æ˜¾ç¤ºç»“æœ
                 cameraCurrent.Image = frame.ToBitmap();
-                currentStatusLabel.Text = $"³éÖĞË÷ÒıÖµÎª {selectedFaceIndex} µÄÁ³£¬º¢×ÓÄãÖĞÁË£¡";
+                currentStatusLabel.Text = $"æŠ½ä¸­ç´¢å¼•å€¼ä¸º {selectedFaceIndex} çš„è„¸ï¼Œå­©å­ä½ ä¸­äº†ï¼";
 
-                // ÊÍ·Å×ÊÔ´
+                // é‡Šæ”¾èµ„æº
                 GC.Collect();
             }
             else
             {
-                // ×é¼ş×´Ì¬»Ö¸´
+                // ç»„ä»¶çŠ¶æ€æ¢å¤
                 configGroupBox.Enabled = true;
                 randomBtn.Enabled = true;
                 backBtn.Enabled = false;
-                currentStatusLabel.Text = "¾ÍĞ÷";
+                currentStatusLabel.Text = "å°±ç»ª";
             }
         }
 
-        // µã»÷·µ»Ø°´Å¥
+        // ç‚¹å‡»è¿”å›æŒ‰é’®
         private void backBtn_Click(object sender, EventArgs e)
         {
-            // ÖØĞÂÆô¶¯¼ÆÊ±Æ÷
+            // é‡æ–°å¯åŠ¨è®¡æ—¶å™¨
             captureTimer.Start();
 
-            // ×é¼ş¿ØÖÆ
+            // ç»„ä»¶æ§åˆ¶
             configGroupBox.Enabled = true;
             randomBtn.Enabled = true;
             backBtn.Enabled = false;
-            currentStatusLabel.Text = "¾ÍĞ÷";
+            currentStatusLabel.Text = "å°±ç»ª";
         }
 
-        // ÏµÍ³×´Ì¬
+        // ç³»ç»ŸçŠ¶æ€
         private void machineStatusTimer_Tick(object sender, EventArgs e)
         {
-            // »ñÈ¡CPUÊ¹ÓÃÂÊ
+            // è·å–CPUä½¿ç”¨ç‡
             float cpuUsage = cpuCounter.NextValue();
 
-            // ¸üĞÂ±êÇ©ÎÄ±¾
+            // æ›´æ–°æ ‡ç­¾æ–‡æœ¬
             machineStatusLabel.Text = $"CPU: {cpuUsage:F2}%";
         }
 
-        // ¹ØÓÚ
+        // å…³äº
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TaskDialogPage page = new TaskDialogPage()
             {
-                Text = "ÕâÊÇÒ»¸öÆô·¢ÓÚÄ³ÎÖ»ùÓÚÈËÁ³Ê¶±ğËæ»ú³éÈËµÄÍæ¾ß\n" +
-                "°æ±¾: 1.0.0\n" +
-                "ÓÉ What_Damon ¿ª·¢ (ÑÏ¸ñÒâÒåÉÏÊ±Æ´Ìù×éºÏ)\n" +
-                "Ê¹ÓÃ Apache 2.0 Ğí¿ÉÖ¤¿ªÔ´\n" +
-                "ÏîÄ¿ÒÀÀµ:\n" +
-                " ¡¤ OpenCV (OpenCvSharp4)\n" +
-                " ¡¤ Costura.Fody\n" +
-                "×¢Òâ! OpenCV µÄÒÀÀµ¿ÉÄÜÊ¹ÓÃµ½ÁË²»Í¬µÄĞí¿ÉÖ¤\n" +
-                "Çë×ÃÇé¿¼ÂÇÉÌÓÃÎÊÌâ£¡",
-                Heading = "¹ØÓÚ OpenLuckyRandom",
-                Caption = "¹ØÓÚ",
+                Text = "è¿™æ˜¯ä¸€ä¸ªå¯å‘äºæŸæ²ƒåŸºäºäººè„¸è¯†åˆ«éšæœºæŠ½äººçš„ç©å…·\n" +
+                "ç‰ˆæœ¬: 1.1.0\n" +
+                "ç”± What_Damon å¼€å‘ (ä¸¥æ ¼æ„ä¹‰ä¸Šæ—¶æ‹¼è´´ç»„åˆ)\n" +
+                "ä½¿ç”¨ Apache 2.0 è®¸å¯è¯å¼€æº\n" +
+                "é¡¹ç›®ä¾èµ–:\n" +
+                " Â· OpenCV (OpenCvSharp4)\n" +
+                " Â· Costura.Fody\n" +
+                "æ³¨æ„! OpenCV çš„ä¾èµ–å¯èƒ½ä½¿ç”¨åˆ°äº†ä¸åŒçš„è®¸å¯è¯\n" +
+                "è¯·é…Œæƒ…è€ƒè™‘å•†ç”¨é—®é¢˜ï¼",
+                Heading = "å…³äº OpenLuckyRandom",
+                Caption = "å…³äº",
                 Icon = TaskDialogIcon.Information,
                 DefaultButton = TaskDialogButton.OK,
                 Buttons = { TaskDialogButton.OK }
@@ -335,7 +342,7 @@ namespace OpenLuckyRandom
             TaskDialogButton result = TaskDialog.ShowDialog(this, page);
         }
 
-        // ´ò¿ª¿ªÔ´²Ö¿â
+        // æ‰“å¼€å¼€æºä»“åº“
         private void repoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Process.Start("explorer.exe", "https://github.com/WhatDamon/OpenLuckyRandom");

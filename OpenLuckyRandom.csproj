@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
+	<PublishSingleFile>true</PublishSingleFile>
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
@@ -14,10 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Costura.Fody" Version="5.7.0">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="OpenCvSharp4" Version="4.10.0.20241108" />
     <PackageReference Include="OpenCvSharp4.Extensions" Version="4.10.0.20241108" />
     <PackageReference Include="OpenCvSharp4.runtime.win" Version="4.10.0.20241108" />
@@ -39,14 +36,11 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-	  <ItemGroup>
-		  <CascadesFiles Include="$(SolutionDir)cascades\*.xml"/>
-	  </ItemGroup>
+    <ItemGroup>
+      <CascadesFiles Include="$(SolutionDir)cascades\*.xml" />
+    </ItemGroup>
 
-	  <Copy
-		  SourceFiles="@(CascadesFiles)"
-		  DestinationFolder="$(OutputPath)\cascades"
-        />
+    <Copy SourceFiles="@(CascadesFiles)" DestinationFolder="$(OutputPath)\cascades" />
   </Target>
 
 </Project>

@@ -328,8 +328,9 @@ namespace OpenLuckyRandom
                 "由 What_Damon 开发 (严格意义上时拼贴组合)\n" +
                 "使用 Apache 2.0 许可证开源\n" +
                 "项目依赖:\n" +
-                " · OpenCV (OpenCvSharp4)\n" +
-                " · Costura.Fody\n" +
+                " · OpenCvSharp4\n" +
+                " · OpenCvSharp4.Extensions\n" +
+                " · OpenCvSharp4.runtime.win\n" +
                 "注意! OpenCV 的依赖可能使用到了不同的许可证\n" +
                 "请酌情考虑商用问题！",
                 Heading = "关于 OpenLuckyRandom",

@@ -7,6 +7,7 @@ using System.Diagnostics;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Net;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace OpenLuckyRandom
 {
@@ -18,18 +19,24 @@ namespace OpenLuckyRandom
         private CascadeClassifier faceCascade;
         private PerformanceCounter cpuCounter;
         private int frameThickness = 6;
+        private string[] cascadeFiles = {
+            "haarcascade_frontalface_default.xml",
+            "haarcascade_frontalface_alt.xml",
+            "haarcascade_frontalface_alt2.xml"
+        };
 
         public WndMain()
         {
             InitializeComponent();
             CameraDevicesLoad();
-            LoadFaceCascade();
+            LoadFaceCascade(cascadeFiles[0]);
 
             // 初始化性能计数器
             cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
 
             // 组件值定义
             frameThicknessNum.Value = frameThickness;
+            cascadesComboBox.SelectedIndex = 0;
         }
 
         // 加载摄像头设备
@@ -62,21 +69,39 @@ namespace OpenLuckyRandom
         }
 
         // 加载人脸级联分类器
-        private void LoadFaceCascade()
+        private void LoadFaceCascade(string fileName)
         {
-            string xmlPath = Path.Combine(Application.StartupPath, "haarcascade_frontalface_default.xml");
+            // 释放之前的 CascadeClassifier 实例
+            if (faceCascade != null)
+            {
+                faceCascade.Dispose();
+                faceCascade = null;
+                System.GC.Collect();
+            }
+
+            string xmlPath = Path.Combine(Application.StartupPath, "cascades/", fileName);
             try
             {
                 faceCascade = new CascadeClassifier(xmlPath);
                 if (faceCascade.Empty())
                 {
-                    currentStatusLabel.Text = "人脸级联分类器加载失败";
+                    currentStatusLabel.Text = $"人脸级联分类器 {fileName} 加载失败";
+                }
+                else
+                {
+                    currentStatusLabel.Text = $"成功加载人脸级联分类器: {fileName}";
                 }
             }
             catch (Exception ex)
             {
                 currentStatusLabel.Text = $"加载人脸级联分类器时发生错误: {ex.Message}";
             }
+        }
+
+        // 级联分类器修改
+        private void cascadesComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            LoadFaceCascade(cascadeFiles[cascadesComboBox.SelectedIndex]);
         }
 
         // 点击刷新摄像头按钮

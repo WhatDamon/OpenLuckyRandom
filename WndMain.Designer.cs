@@ -32,6 +32,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(WndMain));
             cameraCurrent = new PictureBox();
             configGroupBox = new GroupBox();
+            cascadesComboBox = new ComboBox();
+            cascadesLabel = new Label();
             frameThicknessWarningLabel = new Label();
             frameThicknessLabel = new Label();
             applyframeThicknessBtn = new Button();
@@ -76,6 +78,8 @@
             // 
             // configGroupBox
             // 
+            configGroupBox.Controls.Add(cascadesComboBox);
+            configGroupBox.Controls.Add(cascadesLabel);
             configGroupBox.Controls.Add(frameThicknessWarningLabel);
             configGroupBox.Controls.Add(frameThicknessLabel);
             configGroupBox.Controls.Add(applyframeThicknessBtn);
@@ -94,12 +98,32 @@
             configGroupBox.TabStop = false;
             configGroupBox.Text = "配置";
             // 
+            // cascadesComboBox
+            // 
+            cascadesComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            cascadesComboBox.FormattingEnabled = true;
+            cascadesComboBox.Items.AddRange(new object[] { "Default", "Alt", "Alt2" });
+            cascadesComboBox.Location = new Point(343, 56);
+            cascadesComboBox.Name = "cascadesComboBox";
+            cascadesComboBox.Size = new Size(331, 32);
+            cascadesComboBox.TabIndex = 12;
+            cascadesComboBox.SelectedIndexChanged += cascadesComboBox_SelectedIndexChanged;
+            // 
+            // cascadesLabel
+            // 
+            cascadesLabel.AutoSize = true;
+            cascadesLabel.Location = new Point(343, 29);
+            cascadesLabel.Name = "cascadesLabel";
+            cascadesLabel.Size = new Size(140, 24);
+            cascadesLabel.TabIndex = 11;
+            cascadesLabel.Text = "选择级联分类器:";
+            // 
             // frameThicknessWarningLabel
             // 
             frameThicknessWarningLabel.AutoSize = true;
             frameThicknessWarningLabel.Font = new Font("Microsoft YaHei UI", 7F, FontStyle.Italic);
             frameThicknessWarningLabel.ForeColor = Color.Red;
-            frameThicknessWarningLabel.Location = new Point(343, 92);
+            frameThicknessWarningLabel.Location = new Point(343, 151);
             frameThicknessWarningLabel.Name = "frameThicknessWarningLabel";
             frameThicknessWarningLabel.Size = new Size(233, 20);
             frameThicknessWarningLabel.TabIndex = 10;
@@ -108,7 +132,7 @@
             // frameThicknessLabel
             // 
             frameThicknessLabel.AutoSize = true;
-            frameThicknessLabel.Location = new Point(343, 27);
+            frameThicknessLabel.Location = new Point(343, 91);
             frameThicknessLabel.Name = "frameThicknessLabel";
             frameThicknessLabel.Size = new Size(86, 24);
             frameThicknessLabel.TabIndex = 9;
@@ -116,7 +140,7 @@
             // 
             // applyframeThicknessBtn
             // 
-            applyframeThicknessBtn.Location = new Point(614, 55);
+            applyframeThicknessBtn.Location = new Point(614, 114);
             applyframeThicknessBtn.Name = "applyframeThicknessBtn";
             applyframeThicknessBtn.Size = new Size(60, 34);
             applyframeThicknessBtn.TabIndex = 8;
@@ -126,7 +150,7 @@
             // 
             // frameThicknessNum
             // 
-            frameThicknessNum.Location = new Point(343, 58);
+            frameThicknessNum.Location = new Point(343, 117);
             frameThicknessNum.Maximum = new decimal(new int[] { 15, 0, 0, 0 });
             frameThicknessNum.Minimum = new decimal(new int[] { 2, 0, 0, 0 });
             frameThicknessNum.Name = "frameThicknessNum";
@@ -188,7 +212,7 @@
             // chooseCameraLabel
             // 
             chooseCameraLabel.AutoSize = true;
-            chooseCameraLabel.Location = new Point(6, 27);
+            chooseCameraLabel.Location = new Point(6, 29);
             chooseCameraLabel.Name = "chooseCameraLabel";
             chooseCameraLabel.Size = new Size(104, 24);
             chooseCameraLabel.TabIndex = 1;
@@ -370,5 +394,7 @@
         private NumericUpDown frameThicknessNum;
         private Button backBtn;
         private Label frameThicknessWarningLabel;
+        private ComboBox cascadesComboBox;
+        private Label cascadesLabel;
     }
 }

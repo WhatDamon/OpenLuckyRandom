@@ -6,7 +6,12 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>assets\openluckyrandom.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="assets\openluckyrandom.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Costura.Fody" Version="5.7.0">

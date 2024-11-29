@@ -38,4 +38,15 @@
     </EmbeddedResource>
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+	  <ItemGroup>
+		  <CascadesFiles Include="$(SolutionDir)cascades\*.xml"/>
+	  </ItemGroup>
+
+	  <Copy
+		  SourceFiles="@(CascadesFiles)"
+		  DestinationFolder="$(OutputPath)\cascades"
+        />
+  </Target>
+
 </Project>

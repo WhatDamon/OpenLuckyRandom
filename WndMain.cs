@@ -334,5 +334,11 @@ namespace OpenLuckyRandom
 
             TaskDialogButton result = TaskDialog.ShowDialog(this, page);
         }
+
+        // 打开开源仓库
+        private void repoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Process.Start("explorer.exe", "https://github.com/WhatDamon/OpenLuckyRandom");
+        }
     }
 }

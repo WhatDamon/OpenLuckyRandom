@@ -50,6 +50,7 @@
             currentStatusLabel = new ToolStripStatusLabel();
             optionsDropDownBtn = new ToolStripDropDownButton();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            repoToolStripMenuItem = new ToolStripMenuItem();
             machineStatusLabel = new ToolStripStatusLabel();
             captureTimer = new System.Windows.Forms.Timer(components);
             infoGroupBox = new GroupBox();
@@ -57,6 +58,7 @@
             machineStatusTimer = new System.Windows.Forms.Timer(components);
             randomBtn = new Button();
             backBtn = new Button();
+            label1 = new Label();
             ((System.ComponentModel.ISupportInitialize)cameraCurrent).BeginInit();
             configGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)frameThicknessNum).BeginInit();
@@ -258,7 +260,7 @@
             // 
             optionsDropDownBtn.Alignment = ToolStripItemAlignment.Right;
             optionsDropDownBtn.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            optionsDropDownBtn.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
+            optionsDropDownBtn.DropDownItems.AddRange(new ToolStripItem[] { repoToolStripMenuItem, aboutToolStripMenuItem });
             optionsDropDownBtn.Image = (Image)resources.GetObject("optionsDropDownBtn.Image");
             optionsDropDownBtn.ImageTransparentColor = Color.Magenta;
             optionsDropDownBtn.Name = "optionsDropDownBtn";
@@ -268,9 +270,16 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(146, 34);
+            aboutToolStripMenuItem.Size = new Size(270, 34);
             aboutToolStripMenuItem.Text = "关于";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
+            // 
+            // repoToolStripMenuItem
+            // 
+            repoToolStripMenuItem.Name = "repoToolStripMenuItem";
+            repoToolStripMenuItem.Size = new Size(270, 34);
+            repoToolStripMenuItem.Text = "开源仓库";
+            repoToolStripMenuItem.Click += repoToolStripMenuItem_Click;
             // 
             // machineStatusLabel
             // 
@@ -316,9 +325,9 @@
             randomBtn.Enabled = false;
             randomBtn.Font = new Font("Microsoft YaHei UI", 22F, FontStyle.Bold, GraphicsUnit.Point, 134);
             randomBtn.ForeColor = SystemColors.Highlight;
-            randomBtn.Location = new Point(879, 694);
+            randomBtn.Location = new Point(938, 694);
             randomBtn.Name = "randomBtn";
-            randomBtn.Size = new Size(527, 107);
+            randomBtn.Size = new Size(468, 107);
             randomBtn.TabIndex = 4;
             randomBtn.Text = "开始抽选";
             randomBtn.UseVisualStyleBackColor = true;
@@ -327,19 +336,31 @@
             // backBtn
             // 
             backBtn.Enabled = false;
+            backBtn.Font = new Font("Microsoft YaHei UI", 10F);
             backBtn.Location = new Point(699, 694);
             backBtn.Name = "backBtn";
-            backBtn.Size = new Size(174, 107);
+            backBtn.Size = new Size(233, 56);
             backBtn.TabIndex = 5;
             backBtn.Text = "返回";
             backBtn.UseVisualStyleBackColor = true;
             backBtn.Click += backBtn_Click;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft YaHei UI", 7F, FontStyle.Italic, GraphicsUnit.Point, 134);
+            label1.Location = new Point(699, 753);
+            label1.Name = "label1";
+            label1.Size = new Size(233, 40);
+            label1.TabIndex = 6;
+            label1.Text = "如果遇到了内容停止且按下抽选无效\r\n请点击选择摄像头的“刷新”恢复";
             // 
             // WndMain
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1418, 844);
+            Controls.Add(label1);
             Controls.Add(backBtn);
             Controls.Add(randomBtn);
             Controls.Add(infoGroupBox);
@@ -396,5 +417,7 @@
         private Label frameThicknessWarningLabel;
         private ComboBox cascadesComboBox;
         private Label cascadesLabel;
+        private Label label1;
+        private ToolStripMenuItem repoToolStripMenuItem;
     }
 }

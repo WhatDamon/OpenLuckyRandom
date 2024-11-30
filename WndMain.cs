@@ -67,9 +67,6 @@ namespace OpenLuckyRandom
 
             // 设置窗体标题
             this.Text = $"OpenLuckyRandom ({_architecture}) {(_isDebugBuild ? "[Debug]" : "")}";
-
-            // 组件整体刷新
-            this.Refresh();
         }
 
         // 加载摄像头设备
@@ -128,6 +125,10 @@ namespace OpenLuckyRandom
                 {
                     currentStatusLabel.Text = $"成功加载人脸级联分类器: {fileName}";
                 }
+
+                // 刷新显示
+                this.Invalidate(true);
+                this.Update();
             }
             catch (Exception ex)
             {

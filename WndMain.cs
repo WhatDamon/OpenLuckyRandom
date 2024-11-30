@@ -44,6 +44,9 @@ namespace OpenLuckyRandom
             // 组件值定义
             frameThicknessNum.Value = frameThickness;
             cascadesComboBox.SelectedIndex = 0;
+
+            // 组件整体刷新
+            this.Refresh();
         }
 
         // 加载摄像头设备

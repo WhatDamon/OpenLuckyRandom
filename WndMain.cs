@@ -45,6 +45,10 @@ namespace OpenLuckyRandom
         // 加载摄像头设备
         private void CameraDevicesLoad()
         {
+            // 顺便释放点垃圾
+            GC.Collect();
+
+            // 清空下拉列表
             cameraComboBox.Items.Clear();
             bool _cameraFound = false;
             foreach (var i in FindCamera.EnumDevices.Devices)
@@ -79,7 +83,7 @@ namespace OpenLuckyRandom
             {
                 faceCascade.Dispose();
                 faceCascade = null;
-                System.GC.Collect();
+                GC.Collect();
             }
 
             string xmlPath = Path.Combine(Application.StartupPath, "cascades/", fileName);
@@ -317,6 +321,9 @@ namespace OpenLuckyRandom
         // 关于
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            // 顺便垃圾回收下
+            GC.Collect();
+
             TaskDialogPage page = new TaskDialogPage()
             {
                 Text = "这是一个启发于某沃基于人脸识别随机抽人的玩具\n" +

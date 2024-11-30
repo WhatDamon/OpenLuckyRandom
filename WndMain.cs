@@ -29,9 +29,11 @@ namespace OpenLuckyRandom
         public WndMain()
         {
             InitializeComponent();
-            CameraDevicesLoad();
-            LoadFaceCascade(cascadeFiles[0]);
+            this.Load += WndMain_Load;
+        }
 
+        private async void WndMain_Load(object sender, EventArgs e)
+        {
             // 初始化性能计数器
             cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
 
@@ -67,73 +69,81 @@ namespace OpenLuckyRandom
 
             // 设置窗体标题
             this.Text = $"OpenLuckyRandom ({_architecture}) {(_isDebugBuild ? "[Debug]" : "")}";
+
+            // 摄像初始化
+            CameraDevicesLoad();
+            LoadFaceCascade(cascadeFiles[0]);
         }
 
         // 加载摄像头设备
-        private void CameraDevicesLoad()
+        private async void CameraDevicesLoad()
         {
-            // 顺便释放点垃圾
-            GC.Collect();
-
-            // 清空下拉列表
-            cameraComboBox.Items.Clear();
-            bool _cameraFound = false;
-            foreach (var i in FindCamera.EnumDevices.Devices)
+            await Task.Run(() =>
             {
-                // 添加设备名称到下拉列表
-                cameraComboBox.Items.Add(i);
-
-                // 检查是否找到特定摄像头
-                if (i.ToString() == "Smart Camera" || _cameraFound == false) // 希沃一体机顶部摄像头名称为Smart Camera
-                {
-                    cameraComboBox.SelectedItem = i;
-                    _cameraFound = true;
-                }
-            }
-            if (cameraComboBox.Items.Count == 0)
-            {
-                currentStatusLabel.Text = "未找到摄像头";
-                cameraComboBox.Enabled = false;
-            }
-            else
-            {
-                cameraComboBox.SelectedIndex = 0;  // 默认选择第一个
-                currentStatusLabel.Text = "就绪";
-            }
-        }
-
-        // 加载人脸级联分类器
-        private void LoadFaceCascade(string fileName)
-        {
-            // 释放之前的 CascadeClassifier 实例
-            if (faceCascade != null)
-            {
-                faceCascade.Dispose();
-                faceCascade = null;
                 GC.Collect();
-            }
-
-            string xmlPath = Path.Combine(Application.StartupPath, "cascades/", fileName);
-            try
-            {
-                faceCascade = new CascadeClassifier(xmlPath);
-                if (faceCascade.Empty())
+                cameraComboBox.Invoke(new Action(() => cameraComboBox.Items.Clear()));
+                bool _cameraFound = false;
+                foreach (var i in FindCamera.EnumDevices.Devices)
                 {
-                    currentStatusLabel.Text = $"人脸级联分类器 {fileName} 加载失败";
+                    // 添加设备名称到下拉列表
+                    cameraComboBox.Invoke(new Action(() => cameraComboBox.Items.Add(i)));
+                    // 检查是否找到特定摄像头
+                    if (i.ToString() == "Smart Camera" || !_cameraFound)
+                    {
+                        cameraComboBox.Invoke(new Action(() => cameraComboBox.SelectedItem = i));
+                        _cameraFound = true;
+                    }
+                }
+
+                if (cameraComboBox.Items.Count == 0)
+                {
+                    Invoke(new Action(() => currentStatusLabel.Text = "未找到摄像头"));
+                    cameraComboBox.Invoke(new Action(() => cameraComboBox.Enabled = false));
                 }
                 else
                 {
-                    currentStatusLabel.Text = $"成功加载人脸级联分类器: {fileName}";
+                    Invoke(new Action(() => cameraComboBox.SelectedIndex = 0));  // 默认选择第一个
+                    Invoke(new Action(() => currentStatusLabel.Text = "就绪"));
                 }
+            });
+        }
 
-                // 刷新显示
-                this.Invalidate(true);
-                this.Update();
-            }
-            catch (Exception ex)
+        // 加载人脸级联分类器
+        private async void LoadFaceCascade(string fileName)
+        {
+            await Task.Run(() =>
             {
-                currentStatusLabel.Text = $"加载人脸级联分类器时发生错误: {ex.Message}";
-            }
+                // 释放之前的 CascadeClassifier 实例
+                if (faceCascade != null)
+                {
+                    faceCascade.Dispose();
+                    faceCascade = null;
+                    GC.Collect();
+                }
+                string xmlPath = Path.Combine(Application.StartupPath, "cascades/", fileName);
+                try
+                {
+                    faceCascade = new CascadeClassifier(xmlPath);
+                    if (faceCascade.Empty())
+                    {
+                        Invoke(new Action(() => currentStatusLabel.Text = $"人脸级联分类器 {fileName} 加载失败"));
+                    }
+                    else
+                    {
+                        Invoke(new Action(() => currentStatusLabel.Text = $"成功加载人脸级联分类器: {fileName}"));
+                    }
+                    // 刷新显示
+                    Invoke(new Action(() =>
+                    {
+                        this.Invalidate(true);
+                        this.Update();
+                    }));
+                }
+                catch (Exception ex)
+                {
+                    Invoke(new Action(() => currentStatusLabel.Text = $"加载人脸级联分类器时发生错误: {ex.Message}"));
+                }
+            });
         }
 
         // 级联分类器修改

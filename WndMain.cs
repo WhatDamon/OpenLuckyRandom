@@ -5,16 +5,9 @@
  * https://github.com/WhatDamon/OpenLuckyRandom
 */
 
-using System;
-using System.ComponentModel;
-using System.IO;
-using System.Reflection.Emit;
-using System.Windows.Forms;
-using System.Diagnostics;
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
-using System.Net;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using System.Diagnostics;
 
 namespace OpenLuckyRandom
 {

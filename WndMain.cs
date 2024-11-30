@@ -193,6 +193,7 @@ namespace OpenLuckyRandom
         private void applyTimerIntervalBtn_Click(object sender, EventArgs e)
         {
             captureTimer.Interval = Convert.ToInt32(timerIntervalNum.Value);
+            fpsLabel.Text = $"约合 {Math.Round((decimal)(1000 / captureTimer.Interval), 1)} 帧";
         }
 
         // 点击边框厚度按钮

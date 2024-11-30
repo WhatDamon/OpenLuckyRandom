@@ -49,8 +49,8 @@
             statusLabel = new ToolStripStatusLabel();
             currentStatusLabel = new ToolStripStatusLabel();
             optionsDropDownBtn = new ToolStripDropDownButton();
-            aboutToolStripMenuItem = new ToolStripMenuItem();
             repoToolStripMenuItem = new ToolStripMenuItem();
+            aboutToolStripMenuItem = new ToolStripMenuItem();
             machineStatusLabel = new ToolStripStatusLabel();
             captureTimer = new System.Windows.Forms.Timer(components);
             infoGroupBox = new GroupBox();
@@ -58,7 +58,8 @@
             machineStatusTimer = new System.Windows.Forms.Timer(components);
             randomBtn = new Button();
             backBtn = new Button();
-            label1 = new Label();
+            helpLabel = new Label();
+            fpsLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)cameraCurrent).BeginInit();
             configGroupBox.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)frameThicknessNum).BeginInit();
@@ -80,6 +81,7 @@
             // 
             // configGroupBox
             // 
+            configGroupBox.Controls.Add(fpsLabel);
             configGroupBox.Controls.Add(cascadesComboBox);
             configGroupBox.Controls.Add(cascadesLabel);
             configGroupBox.Controls.Add(frameThicknessWarningLabel);
@@ -190,7 +192,7 @@
             timerIntervalNum.Name = "timerIntervalNum";
             timerIntervalNum.Size = new Size(265, 30);
             timerIntervalNum.TabIndex = 4;
-            timerIntervalNum.Value = new decimal(new int[] { 30, 0, 0, 0 });
+            timerIntervalNum.Value = new decimal(new int[] { 40, 0, 0, 0 });
             // 
             // timerIntervalLabel
             // 
@@ -267,19 +269,19 @@
             optionsDropDownBtn.Size = new Size(64, 33);
             optionsDropDownBtn.Text = "选项";
             // 
-            // aboutToolStripMenuItem
-            // 
-            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(270, 34);
-            aboutToolStripMenuItem.Text = "关于";
-            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
-            // 
             // repoToolStripMenuItem
             // 
             repoToolStripMenuItem.Name = "repoToolStripMenuItem";
-            repoToolStripMenuItem.Size = new Size(270, 34);
+            repoToolStripMenuItem.Size = new Size(182, 34);
             repoToolStripMenuItem.Text = "开源仓库";
             repoToolStripMenuItem.Click += repoToolStripMenuItem_Click;
+            // 
+            // aboutToolStripMenuItem
+            // 
+            aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            aboutToolStripMenuItem.Size = new Size(182, 34);
+            aboutToolStripMenuItem.Text = "关于";
+            aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
             // machineStatusLabel
             // 
@@ -291,7 +293,7 @@
             // 
             // captureTimer
             // 
-            captureTimer.Interval = 30;
+            captureTimer.Interval = 40;
             captureTimer.Tick += captureTimer_Tick;
             // 
             // infoGroupBox
@@ -345,22 +347,34 @@
             backBtn.UseVisualStyleBackColor = true;
             backBtn.Click += backBtn_Click;
             // 
-            // label1
+            // helpLabel
             // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Microsoft YaHei UI", 7F, FontStyle.Italic, GraphicsUnit.Point, 134);
-            label1.Location = new Point(699, 753);
-            label1.Name = "label1";
-            label1.Size = new Size(233, 40);
-            label1.TabIndex = 6;
-            label1.Text = "如果遇到了内容停止且按下抽选无效\r\n请点击选择摄像头的“刷新”恢复";
+            helpLabel.AutoSize = true;
+            helpLabel.Font = new Font("Microsoft YaHei UI", 7F, FontStyle.Italic, GraphicsUnit.Point, 134);
+            helpLabel.Location = new Point(699, 753);
+            helpLabel.Name = "helpLabel";
+            helpLabel.Size = new Size(233, 40);
+            helpLabel.TabIndex = 6;
+            helpLabel.Text = "如果遇到了内容停止且按下抽选无效\r\n请点击选择摄像头的“刷新”恢复";
+            // 
+            // fpsLabel
+            // 
+            fpsLabel.AutoSize = true;
+            fpsLabel.Font = new Font("Microsoft YaHei UI", 6F);
+            fpsLabel.ForeColor = Color.ForestGreen;
+            fpsLabel.Location = new Point(271, 92);
+            fpsLabel.Name = "fpsLabel";
+            fpsLabel.Size = new Size(66, 17);
+            fpsLabel.TabIndex = 13;
+            fpsLabel.Text = "约合 25 帧";
+            fpsLabel.TextAlign = ContentAlignment.TopRight;
             // 
             // WndMain
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1418, 844);
-            Controls.Add(label1);
+            Controls.Add(helpLabel);
             Controls.Add(backBtn);
             Controls.Add(randomBtn);
             Controls.Add(infoGroupBox);
@@ -417,7 +431,8 @@
         private Label frameThicknessWarningLabel;
         private ComboBox cascadesComboBox;
         private Label cascadesLabel;
-        private Label label1;
+        private Label helpLabel;
         private ToolStripMenuItem repoToolStripMenuItem;
+        private Label fpsLabel;
     }
 }

@@ -8,6 +8,7 @@
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Diagnostics;
+using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace OpenLuckyRandom
@@ -125,10 +126,6 @@ namespace OpenLuckyRandom
                 {
                     currentStatusLabel.Text = $"成功加载人脸级联分类器: {fileName}";
                 }
-
-                // 刷新显示
-                this.Invalidate(true);
-                this.Update();
             }
             catch (Exception ex)
             {
@@ -358,7 +355,7 @@ namespace OpenLuckyRandom
             TaskDialogPage page = new TaskDialogPage()
             {
                 Text = "这是一个启发于某沃基于人脸识别随机抽人的玩具\n" +
-                "版本: 1.1.0\n" +
+                $"版本: {Assembly.GetExecutingAssembly().GetName().Version}\n" +
                 "由 What_Damon 开发 (严格意义上时拼贴组合)\n" +
                 "使用 Apache 2.0 许可证开源\n" +
                 "项目依赖:\n" +
@@ -366,7 +363,8 @@ namespace OpenLuckyRandom
                 " · OpenCvSharp4.Extensions\n" +
                 " · OpenCvSharp4.runtime.win\n" +
                 "注意! OpenCV 的依赖可能使用到了不同的许可证\n" +
-                "请酌情考虑商用问题！",
+                "请酌情考虑商用问题！\n\n" +
+                $".NET版本: {Environment.Version.ToString()}",
                 Heading = "关于 OpenLuckyRandom",
                 Caption = "关于",
                 Icon = TaskDialogIcon.Information,

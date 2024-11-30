@@ -8,6 +8,7 @@
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace OpenLuckyRandom
 {
@@ -37,6 +38,35 @@ namespace OpenLuckyRandom
             // 组件值定义
             frameThicknessNum.Value = frameThickness;
             cascadesComboBox.SelectedIndex = 0;
+
+            // 检查当前进程架构
+            string _architecture;
+            switch (RuntimeInformation.ProcessArchitecture)
+            {
+                case Architecture.X86:
+                    _architecture = "x86";
+                    break;
+                case Architecture.X64:
+                    _architecture = "x64";
+                    break;
+                case Architecture.Arm:
+                    _architecture = "ARM32";
+                    break;
+                case Architecture.Arm64:
+                    _architecture = "ARM64";
+                    break;
+                default:
+                    _architecture = "Unknown";
+                    break;
+            }
+
+            // 检查是否为调试版本
+            bool _isDebugBuild = typeof(WndMain).Assembly.GetCustomAttributes(false)
+                .OfType<DebuggableAttribute>()
+                .Any(da => da.IsJITTrackingEnabled || da.IsJITOptimizerDisabled);
+
+            // 设置窗体标题
+            this.Text = $"OpenLuckyRandom ({_architecture}) {(_isDebugBuild ? "[Debug]" : "")}";
 
             // 组件整体刷新
             this.Refresh();

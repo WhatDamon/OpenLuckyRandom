@@ -7,8 +7,7 @@
 
 using OpenCvSharp;
 using OpenCvSharp.Extensions;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
+using System.Reflection;
 
 namespace OpenLuckyRandom
 {
@@ -18,57 +17,30 @@ namespace OpenLuckyRandom
         private VideoCapture capture;
         private Mat frame = new Mat();
         private CascadeClassifier faceCascade;
-        private PerformanceCounter cpuCounter;
+        private int detectionInterval = 3;
+        private int lastDetectionFrameIndex = -1;
+        private int frameIndex = 0;
+        private int nextIndex = 0;
         private int frameThickness = 6;
         private string[] cascadeFiles = {
+            "lbpcascade_frontalface.xml.xml",
+            "lbpcascade_frontalface_improved.xml",
             "haarcascade_frontalface_default.xml",
             "haarcascade_frontalface_alt.xml",
             "haarcascade_frontalface_alt2.xml"
         };
+        private Dictionary<int, Rect> indexedFaceRectangles = new Dictionary<int, Rect>();
 
         public WndMain()
         {
             InitializeComponent();
-            this.Load += WndMain_Load;
-        }
-
-        private async void WndMain_Load(object sender, EventArgs e)
-        {
-            // 初始化性能计数器
-            cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
-
             // 组件值定义
             frameThicknessNum.Value = frameThickness;
             cascadesComboBox.SelectedIndex = 0;
-
-            // 检查当前进程架构
-            string _architecture;
-            switch (RuntimeInformation.ProcessArchitecture)
-            {
-                case Architecture.X86:
-                    _architecture = "x86";
-                    break;
-                case Architecture.X64:
-                    _architecture = "x64";
-                    break;
-                case Architecture.Arm:
-                    _architecture = "ARM32";
-                    break;
-                case Architecture.Arm64:
-                    _architecture = "ARM64";
-                    break;
-                default:
-                    _architecture = "Unknown";
-                    break;
-            }
-
-            // 检查是否为调试版本
-            bool _isDebugBuild = typeof(WndMain).Assembly.GetCustomAttributes(false)
-                .OfType<DebuggableAttribute>()
-                .Any(da => da.IsJITTrackingEnabled || da.IsJITOptimizerDisabled);
+            SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 
             // 设置窗体标题
-            this.Text = $"OpenLuckyRandom ({_architecture}) {(_isDebugBuild ? "[Debug]" : "")}";
+            this.Text = $"OpenLuckyRandom {Assembly.GetExecutingAssembly().GetName().Version} ({Misc.Runtime.GetArch()}) {(Misc.Runtime.IsDebug() ? "[Debug]" : "")}";
 
             // 摄像初始化
             CameraDevicesLoad();
@@ -76,11 +48,18 @@ namespace OpenLuckyRandom
         }
 
         // 加载摄像头设备
-        private async void CameraDevicesLoad()
+        private async Task CameraDevicesLoad()
         {
+            // 确保只在窗体加载完成后执行
+            if (!this.IsHandleCreated)
+            {
+                await Task.Delay(100);
+                await CameraDevicesLoad();
+                return;
+            }
+
             await Task.Run(() =>
             {
-                GC.Collect();
                 cameraComboBox.Invoke(new Action(() => cameraComboBox.Items.Clear()));
                 bool _cameraFound = false;
                 foreach (var i in FindCamera.EnumDevices.Devices)
@@ -88,7 +67,7 @@ namespace OpenLuckyRandom
                     // 添加设备名称到下拉列表
                     cameraComboBox.Invoke(new Action(() => cameraComboBox.Items.Add(i)));
                     // 检查是否找到特定摄像头
-                    if (i.ToString() == "Smart Camera" || !_cameraFound)
+                    if (i.ToString() == "Smart_Camera" || !_cameraFound) // “Smart_Camera”是希沃一体机顶部摄像头名称
                     {
                         cameraComboBox.Invoke(new Action(() => cameraComboBox.SelectedItem = i));
                         _cameraFound = true;
@@ -109,8 +88,16 @@ namespace OpenLuckyRandom
         }
 
         // 加载人脸级联分类器
-        private async void LoadFaceCascade(string fileName)
+        private async Task LoadFaceCascade(string fileName)
         {
+            // 确保只在窗体加载完成后执行
+            if (!this.IsHandleCreated)
+            {
+                await Task.Delay(100);
+                await LoadFaceCascade(fileName);
+                return;
+            }
+
             await Task.Run(() =>
             {
                 // 释放之前的 CascadeClassifier 实例
@@ -118,7 +105,6 @@ namespace OpenLuckyRandom
                 {
                     faceCascade.Dispose();
                     faceCascade = null;
-                    GC.Collect();
                 }
                 string xmlPath = Path.Combine(Application.StartupPath, "cascades/", fileName);
                 try
@@ -132,12 +118,6 @@ namespace OpenLuckyRandom
                     {
                         Invoke(new Action(() => currentStatusLabel.Text = $"成功加载人脸级联分类器: {fileName}"));
                     }
-                    // 刷新显示
-                    Invoke(new Action(() =>
-                    {
-                        this.Invalidate(true);
-                        this.Update();
-                    }));
                 }
                 catch (Exception ex)
                 {
@@ -158,6 +138,7 @@ namespace OpenLuckyRandom
             CameraDevicesLoad();
         }
 
+        // 初始化摄像头
         private void InitializeCapture(int cameraIndex)
         {
             // 释放旧的摄像头资源
@@ -180,7 +161,22 @@ namespace OpenLuckyRandom
             }
 
             // 启动计时器
-            captureTimer.Start();
+            streamTimer.Start();
+        }
+
+        // 点击切换配置面板按钮
+        private void toggleConfigBtn_Click(object sender, EventArgs e)
+        {
+            if (configPanel.Visible)
+            {
+                configPanel.Visible = false;
+                toggleConfigBtn.Text = "显示配置面板";
+            }
+            else
+            {
+                configPanel.Visible = true;
+                toggleConfigBtn.Text = "隐藏配置面板";
+            }
         }
 
         // 摄像头选择更改
@@ -189,11 +185,16 @@ namespace OpenLuckyRandom
             InitializeCapture(cameraComboBox.SelectedIndex);
         }
 
-        // 点击应用计时器按钮
-        private void applyTimerIntervalBtn_Click(object sender, EventArgs e)
+        // 点击应用帧率按钮
+        private void applyFpsBtn_Click(object sender, EventArgs e)
         {
-            captureTimer.Interval = Convert.ToInt32(timerIntervalNum.Value);
-            fpsLabel.Text = $"约合 {Math.Round((decimal)(1000 / captureTimer.Interval), 1)} 帧";
+            streamTimer.Interval = (int)Math.Max(1, 1000 / streamFpsNum.Value);
+            if (streamFpsNum.Value < faceRecognFpsNum.Value)
+            {
+                faceRecognFpsNum.Value = streamFpsNum.Value;
+                statusLabel.Text = "人脸识别帧率不能大于视频流帧率";
+            }
+            detectionInterval = (int)Math.Max(1, streamFpsNum.Value / faceRecognFpsNum.Value);
         }
 
         // 点击边框厚度按钮
@@ -202,7 +203,69 @@ namespace OpenLuckyRandom
             frameThickness = Convert.ToInt32(frameThicknessNum.Value);
         }
 
-        private void captureTimer_Tick(object sender, EventArgs e)
+        // 检测人脸
+        private void DetectFaces()
+        {
+            try
+            {
+                lastDetectionFrameIndex = frameIndex;
+
+                double scale = 0.75;
+                OpenCvSharp.Size newSize = new OpenCvSharp.Size(Math.Round(frame.Width * scale), Math.Round(frame.Height * scale));
+                using (Mat resizedFrame = new Mat())
+                {
+                    Cv2.Resize(frame, resizedFrame, newSize);
+
+                    Rect[] detectedFaces = faceCascade.DetectMultiScale(resizedFrame, scaleFactor: 1.1, minNeighbors: 5, minSize: new OpenCvSharp.Size(30, 30));
+
+                    indexedFaceRectangles.Clear();
+                    nextIndex = 0;
+                    foreach (var rect in detectedFaces)
+                    {
+                        int x = (int)(rect.X * scale);
+                        int y = (int)(rect.Y * scale);
+                        int width = (int)(rect.Width * scale);
+                        int height = (int)(rect.Height * scale);
+
+                        indexedFaceRectangles[nextIndex] = new Rect(x, y, width, height);
+                        nextIndex++;
+                    }
+                }
+
+                faceRecogStatusLabel.Text = $"检测到 {indexedFaceRectangles.Count} 张人脸";
+            }
+            catch (Exception ex)
+            {
+                faceRecogStatusLabel.Text = $"检测人脸时发生错误: {ex.Message}";
+            }
+        }
+
+        // 在 currentCamera 上绘制人脸矩形
+        private void DrawFacesOnPictureBox()
+        {
+            try
+            {
+                using (Bitmap bitmap = BitmapConverter.ToBitmap(frame))
+                using (Graphics g = Graphics.FromImage(bitmap))
+                {
+                    foreach (var kvp in indexedFaceRectangles)
+                    {
+                        var rect = kvp.Value;
+                        int index = kvp.Key;
+                        g.DrawRectangle(new Pen(Color.Red, frameThickness), rect.X, rect.Y, rect.Width, rect.Height);
+                    }
+                    cameraCurrent.Image?.Dispose();
+                    cameraCurrent.Image = bitmap;
+                }
+            }
+            catch (Exception ex)
+            {
+                currentStatusLabel.Text = $"绘制人脸矩形时发生错误: {ex.Message}";
+            }
+        }
+
+        // 视频流计时器
+        private void streamTimer_Tick(object sender, EventArgs e)
         {
             // 检查 faceCascade 是否已正确加载
             if (faceCascade == null || faceCascade.Empty())
@@ -212,122 +275,113 @@ namespace OpenLuckyRandom
             }
 
             // 从摄像头读取一帧图像
-            capture.Read(frame);
-            if (frame.Empty())
+            try
             {
-                currentStatusLabel.Text = "无法读取摄像头数据";
-                captureTimer.Stop(); // 停止计时器，防止爆内存或者CPU
-                return;
-            }
-
-            using (Mat grayFrame = new Mat()) // 转换为灰度图像
-            {
-                Cv2.CvtColor(frame, grayFrame, ColorConversionCodes.BGR2GRAY);
-
-                // 检测人脸
-                Rect[] faces = faceCascade.DetectMultiScale(grayFrame, 1.1, 10);
-
-                // 在原图上画矩形框
-                foreach (Rect face in faces)
+                if (capture.Read(frame))
                 {
-                    Cv2.Rectangle(frame, face, Scalar.Red, frameThickness);
-                }
+                    frameIndex++;
+                    bool shouldDetect = (frameIndex - lastDetectionFrameIndex) >= detectionInterval;
 
-                // 更新状态标签
-                if (faces.Length > 0)
-                {
-                    faceRecogStatusLabel.Text = $"检测到 {faces.Length} 个人脸";
-                    randomBtn.Enabled = true;
-                }
-                else
-                {
-                    faceRecogStatusLabel.Text = "未识别到人脸";
-                    randomBtn.Enabled = false;
+                    if (shouldDetect)
+                    {
+                        DetectFaces();
+                    }
+
+                    DrawFacesOnPictureBox();
                 }
             }
-
-            // 将Mat转换为Bitmap，并显示在PictureBox中
-            cameraCurrent.Image = frame.ToBitmap();
+            catch (Exception ex)
+            {
+                currentStatusLabel.Text = $"发生错误: {ex.Message}";
+                streamTimer.Stop(); // 停止计时器，防止爆内存或者CPU
+            }
         }
 
         // 窗口关闭
         private void WndMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            // 停止定时器
-            if (captureTimer != null)
+            // 确保计时器停止后再释放资源
+            if (streamTimer != null)
             {
-                captureTimer.Stop();
-                captureTimer.Dispose();
+                streamTimer.Stop();
+                streamTimer.Dispose();
             }
 
-            // 释放摄像头资源
-            if (capture != null)
-            {
-                capture.Release();
-            }
-
-            // 释放级联分类器资源
-            if (faceCascade != null)
-            {
-                faceCascade.Dispose();
-            }
+            // 确保在UI线程上执行
+            this.Invoke((MethodInvoker)delegate {
+                if (capture != null)
+                {
+                    capture.Release();
+                }
+                if (faceCascade != null)
+                {
+                    faceCascade.Dispose();
+                }
+            });
         }
 
         // 点击随机抽选按钮
         private void randomBtn_Click(object sender, EventArgs e)
         {
             // 暂停计时器
-            captureTimer.Stop();
+            streamTimer.Stop();
 
             // 组件控制
             configGroupBox.Enabled = false;
             randomBtn.Enabled = false;
             backBtn.Enabled = true;
-
-            // 检测人脸
-            Mat grayFrame = new Mat();
-            Cv2.CvtColor(frame, grayFrame, ColorConversionCodes.BGR2GRAY);
-            Rect[] faces = faceCascade.DetectMultiScale(grayFrame, 1.1, 10);
-
-            if (faces.Length > 0)
+            try
             {
-                // 使用随机数算法确定选择哪个人
-                Random rand = new Random();
-                int selectedFaceIndex = rand.Next(faces.Length);
-                Rect selectedFace = faces[selectedFaceIndex];
+                if (indexedFaceRectangles.Count > 0)
+                {
+                    // 随机选择一个索引
+                    Random random = new Random();
+                    int emphasizedIndex = random.Next(indexedFaceRectangles.Count);
 
-                // 强调幸运儿
-                frame.ConvertTo(frame, MatType.CV_8UC3);
-                Cv2.Rectangle(frame, selectedFace, new Scalar(150, 255, 150), frameThickness + 4);
-                Cv2.Rectangle(frame, selectedFace, Scalar.Green, frameThickness - 1);
+                    // 获取对应的Rect对象
+                    Rect selectedFace = indexedFaceRectangles[emphasizedIndex];
 
-                // 绘制蓝色箭头
-                OpenCvSharp.Point endPoint = new OpenCvSharp.Point(selectedFace.X + selectedFace.Width / 2, selectedFace.Y - 20);
-                OpenCvSharp.Point startPoint = new OpenCvSharp.Point(endPoint.X, endPoint.Y - Math.Max(selectedFace.Height / 2, 50));
+                    // 使用其他颜色（例如绿色）绘制矩形框并添加紫色箭头
+                    using (Mat frameCopy = frame.Clone())
+                    {
+                        int frameThickness = 2;
 
-                double arrowLength = 20;
-                double angle = Math.PI / 6;
-                OpenCvSharp.Point leftTip = new OpenCvSharp.Point(
-                    (int)(endPoint.X - arrowLength * Math.Cos(angle)),
-                    (int)(endPoint.Y - arrowLength * Math.Sin(angle))
-                );
-                OpenCvSharp.Point rightTip = new OpenCvSharp.Point(
-                    (int)(endPoint.X + arrowLength * Math.Cos(angle)),
-                    (int)(endPoint.Y - arrowLength * Math.Sin(angle))
-                );
+                        // 强调幸运儿
+                        Cv2.Rectangle(frameCopy, selectedFace, new Scalar(150, 255, 150), frameThickness + 4);
+                        Cv2.Rectangle(frameCopy, selectedFace, Scalar.Green, frameThickness - 1);
 
-                Cv2.Line(frame, startPoint, endPoint, new Scalar(255, 0, 119, 215), frameThickness);
-                Cv2.Line(frame, endPoint, leftTip, new Scalar(255, 0, 119, 215), frameThickness);
-                Cv2.Line(frame, endPoint, rightTip, new Scalar(255, 0, 119, 215), frameThickness);
+                        // 绘制紫色箭头
+                        OpenCvSharp.Point endPoint = new OpenCvSharp.Point(selectedFace.X + selectedFace.Width / 2, selectedFace.Y - 20);
+                        OpenCvSharp.Point startPoint = new OpenCvSharp.Point(endPoint.X, endPoint.Y - Math.Max(selectedFace.Height / 2, 50));
 
-                // 显示结果
-                cameraCurrent.Image = frame.ToBitmap();
-                currentStatusLabel.Text = $"抽中索引值为 {selectedFaceIndex} 的脸，孩子你中了！";
+                        double arrowLength = 20;
+                        double angle = Math.PI / 6;
+                        OpenCvSharp.Point leftTip = new OpenCvSharp.Point(
+                            (int)(endPoint.X - arrowLength * Math.Cos(angle)),
+                            (int)(endPoint.Y - arrowLength * Math.Sin(angle))
+                        );
+                        OpenCvSharp.Point rightTip = new OpenCvSharp.Point(
+                            (int)(endPoint.X + arrowLength * Math.Cos(angle)),
+                            (int)(endPoint.Y - arrowLength * Math.Sin(angle))
+                        );
 
-                // 释放资源
-                GC.Collect();
+                        Cv2.Line(frameCopy, startPoint, endPoint, new Scalar(255, 0, 119, 215), frameThickness);
+                        Cv2.Line(frameCopy, endPoint, leftTip, new Scalar(255, 0, 119, 215), frameThickness);
+                        Cv2.Line(frameCopy, endPoint, rightTip, new Scalar(255, 0, 119, 215), frameThickness);
+
+                        // 将修改后的帧转换为Bitmap并在PictureBox中显示
+                        using (Bitmap bitmap = BitmapConverter.ToBitmap(frameCopy))
+                        using (Graphics g = Graphics.FromImage(bitmap))
+                        {
+                            cameraCurrent.Image?.Dispose(); // 确保之前的图像被释放
+                            cameraCurrent.Image = bitmap;
+                        }
+                    }
+
+                    currentStatusLabel.Text = $"就你啦！索引值为 {emphasizedIndex} 的脸";
+                }
             }
-            else
+            finally
             {
                 // 组件状态恢复
                 configGroupBox.Enabled = true;
@@ -341,7 +395,7 @@ namespace OpenLuckyRandom
         private void backBtn_Click(object sender, EventArgs e)
         {
             // 重新启动计时器
-            captureTimer.Start();
+            streamTimer.Start();
 
             // 组件控制
             configGroupBox.Enabled = true;
@@ -350,48 +404,16 @@ namespace OpenLuckyRandom
             currentStatusLabel.Text = "就绪";
         }
 
-        // 系统状态
-        private void machineStatusTimer_Tick(object sender, EventArgs e)
-        {
-            // 获取CPU使用率
-            float cpuUsage = cpuCounter.NextValue();
-
-            // 更新标签文本
-            machineStatusLabel.Text = $"CPU: {cpuUsage:F2}%";
-        }
-
         // 关于
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // 顺便垃圾回收下
-            GC.Collect();
-
-            TaskDialogPage page = new TaskDialogPage()
-            {
-                Text = "这是一个启发于某沃基于人脸识别随机抽人的玩具\n" +
-                "版本: 1.1.0\n" +
-                "由 What_Damon 开发 (严格意义上时拼贴组合)\n" +
-                "使用 Apache 2.0 许可证开源\n" +
-                "项目依赖:\n" +
-                " · OpenCvSharp4\n" +
-                " · OpenCvSharp4.Extensions\n" +
-                " · OpenCvSharp4.runtime.win\n" +
-                "注意! OpenCV 的依赖可能使用到了不同的许可证\n" +
-                "请酌情考虑商用问题！",
-                Heading = "关于 OpenLuckyRandom",
-                Caption = "关于",
-                Icon = TaskDialogIcon.Information,
-                DefaultButton = TaskDialogButton.OK,
-                Buttons = { TaskDialogButton.OK }
-            };
-
-            TaskDialogButton result = TaskDialog.ShowDialog(this, page);
+            Misc.aboutDialogShow(this);
         }
 
         // 打开开源仓库
         private void repoToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Process.Start("explorer.exe", "https://github.com/WhatDamon/OpenLuckyRandom");
+            Misc.openRepoURL();
         }
     }
 }

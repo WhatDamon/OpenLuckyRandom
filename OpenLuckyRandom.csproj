@@ -7,6 +7,8 @@
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
     <ApplicationIcon>assets\openluckyrandom.ico</ApplicationIcon>
+    <Version>1.2.0</Version>
+    <Authors>What_Damon</Authors>
   </PropertyGroup>
 
   <ItemGroup>

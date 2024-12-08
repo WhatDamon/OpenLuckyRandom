@@ -57,6 +57,7 @@
             cameraComboBox = new ComboBox();
             toggleConfigBtn = new Button();
             faceRecogStatusLabel = new Label();
+            openLogToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)cameraCurrent).BeginInit();
             statusStrip.SuspendLayout();
             configPanel.SuspendLayout();
@@ -107,7 +108,7 @@
             // 
             optionsDropDownBtn.Alignment = ToolStripItemAlignment.Right;
             optionsDropDownBtn.DisplayStyle = ToolStripItemDisplayStyle.Text;
-            optionsDropDownBtn.DropDownItems.AddRange(new ToolStripItem[] { repoToolStripMenuItem, aboutToolStripMenuItem });
+            optionsDropDownBtn.DropDownItems.AddRange(new ToolStripItem[] { openLogToolStripMenuItem, repoToolStripMenuItem, aboutToolStripMenuItem });
             optionsDropDownBtn.ImageTransparentColor = Color.Magenta;
             optionsDropDownBtn.Name = "optionsDropDownBtn";
             optionsDropDownBtn.Size = new Size(64, 33);
@@ -116,14 +117,14 @@
             // repoToolStripMenuItem
             // 
             repoToolStripMenuItem.Name = "repoToolStripMenuItem";
-            repoToolStripMenuItem.Size = new Size(182, 34);
+            repoToolStripMenuItem.Size = new Size(270, 34);
             repoToolStripMenuItem.Text = "开源仓库";
             repoToolStripMenuItem.Click += repoToolStripMenuItem_Click;
             // 
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(182, 34);
+            aboutToolStripMenuItem.Size = new Size(270, 34);
             aboutToolStripMenuItem.Text = "关于";
             aboutToolStripMenuItem.Click += aboutToolStripMenuItem_Click;
             // 
@@ -172,7 +173,7 @@
             // 
             configPanel.BorderStyle = BorderStyle.FixedSingle;
             configPanel.Controls.Add(configGroupBox);
-            configPanel.Location = new Point(18, 488);
+            configPanel.Location = new Point(18, 489);
             configPanel.Name = "configPanel";
             configPanel.Size = new Size(725, 229);
             configPanel.TabIndex = 7;
@@ -347,6 +348,13 @@
             faceRecogStatusLabel.TabIndex = 10;
             faceRecogStatusLabel.Text = "未识别到人脸";
             // 
+            // openLogToolStripMenuItem
+            // 
+            openLogToolStripMenuItem.Name = "openLogToolStripMenuItem";
+            openLogToolStripMenuItem.Size = new Size(270, 34);
+            openLogToolStripMenuItem.Text = "查看日志";
+            openLogToolStripMenuItem.Click += openLogToolStripMenuItem_Click;
+            // 
             // WndMain
             // 
             AutoScaleDimensions = new SizeF(11F, 24F);
@@ -410,5 +418,6 @@
         private Label faceRecogStatusLabel;
         private NumericUpDown faceRecognFpsNum;
         private Label faceRecognFpsLabel;
+        private ToolStripMenuItem openLogToolStripMenuItem;
     }
 }

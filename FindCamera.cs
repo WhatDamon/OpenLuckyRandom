@@ -9,12 +9,13 @@ using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Security;
+using Serilog;
 
 namespace OpenLuckyRandom
 {
     internal class FindCamera
     {
-        // 枚举摄像头，代码源于 https://www.cnblogs.com/ives/p/18569933
+        // 枚举摄像头，代码源于 https://www.cnblogs.com/ives/p/18569933, 适当修改
         public class EnumDevices
         {
             /// <summary>
@@ -24,6 +25,7 @@ namespace OpenLuckyRandom
             {
                 get
                 {
+                    Log.Verbose("Enumerating video devices");
                     IMoniker[] monikers = new IMoniker[5];
                     var devEnum = Activator.CreateInstance(Type.GetTypeFromCLSID(SystemDeviceEnum)) as ICreateDevEnum;
                     IEnumMoniker moniker;
@@ -53,6 +55,7 @@ namespace OpenLuckyRandom
             /// <returns></returns>
             static string GetName(IMoniker moniker)
             {
+                Log.Verbose("Getting device name");
                 IPropertyBag property;
                 object value;
                 object temp = null;

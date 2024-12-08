@@ -8,6 +8,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Serilog;
 
 namespace OpenLuckyRandom
 {
@@ -43,6 +44,7 @@ namespace OpenLuckyRandom
                         _architecture = "Unknown";
                         break;
                 }
+                Log.Verbose($"Architecture: {_architecture}");
                 return _architecture;
             }
 
@@ -52,9 +54,11 @@ namespace OpenLuckyRandom
             /// <returns></returns>
             public static bool IsDebug()
             {
-                return typeof(WndMain).Assembly.GetCustomAttributes(false)
+                bool _isDebug = typeof(WndMain).Assembly.GetCustomAttributes(false)
                 .OfType<DebuggableAttribute>()
                 .Any(da => da.IsJITTrackingEnabled || da.IsJITOptimizerDisabled);
+                Log.Verbose($"IsDebug: {_isDebug}");
+                return _isDebug;
             }
         }
 

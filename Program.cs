@@ -1,3 +1,5 @@
+using Serilog;
+
 namespace OpenLuckyRandom
 {
     internal static class Program
@@ -8,11 +10,28 @@ namespace OpenLuckyRandom
         [STAThread]
         static void Main()
         {
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.File("olr.log")
+                .CreateLogger();
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
-            Application.SetHighDpiMode(HighDpiMode.SystemAware);
-            ApplicationConfiguration.Initialize();
-            Application.Run(new WndMain());
+            try
+            {
+                Log.Information("Starting OpenLuckyRandom");
+                Application.SetHighDpiMode(HighDpiMode.SystemAware);
+                ApplicationConfiguration.Initialize();
+                Application.Run(new WndMain());
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Application terminated unexpectedly");
+            }
+            finally
+            {
+                Log.Information("----------");
+                Log.CloseAndFlush();
+            }
         }
     }
 }

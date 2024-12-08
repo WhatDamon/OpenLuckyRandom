@@ -12,6 +12,9 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_shield)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=shield&issueType=security)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_shield&issueType=security)
 
+> ![WARNIMG]
+> 
+> 本项目正在进行重构，可能存在一些问题，若介意，请下载 Release 版本而不是自行构建！
 
 启发于某沃一体机中的 LuckyRandom 人脸识别随机抽人，使用 WinForms 开发的玩具
 
@@ -52,10 +55,10 @@
 
 推荐直接使用 Visual Studio 或者 JetBrains Rider 进行开发
 
-如果愿意，您也可以尝试将本项目向下移植到较为老旧的 `.NET Framework` 上 (一般推荐直接使用最新的 `.NET`)
+如果愿意，您也可以尝试将本项目向下移植到较为老旧的 `.NET Framework` 上 (一般推荐直接使用最新的 `.NET`, 因为有些组件它不支持)
 
 ## 许可证
 
-本项目使用 **Apache 2.0** 许可证开源，OpenCV 可能还是用了使用 LGPL 的许可证开源的程序
+本项目使用 **Apache 2.0** 许可证开源，见下：
 
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_large)

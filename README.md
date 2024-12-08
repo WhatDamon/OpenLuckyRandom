@@ -1,5 +1,6 @@
 # <img src="assets/openluckyrandom.png" width="32" height="32"/> OpenLuckyRandom
 
+![GitHub Repo stars](https://img.shields.io/github/stars/WhatDamon/OpenLuckyRandom)
 ![GitHub Top Language](https://img.shields.io/github/languages/top/WhatDamon/OpenLuckyRandom)
 ![GitHub Release](https://img.shields.io/github/v/release/WhatDamon/OpenLuckyRandom)
 ![GitHub Downloads](https://img.shields.io/github/downloads/WhatDamon/OpenLuckyRandom/total)
@@ -12,7 +13,7 @@
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_shield)
 [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom.svg?type=shield&issueType=security)](https://app.fossa.com/projects/git%2Bgithub.com%2FWhatDamon%2FOpenLuckyRandom?ref=badge_shield&issueType=security)
 
-> ![WARNIMG]
+> ![WARNING]
 > 
 > 本项目正在进行重构，可能存在一些问题，若介意，请下载 Release 版本而不是自行构建！
 
@@ -22,7 +23,7 @@
 
 可以给带有摄像头的旧某沃一体机或者带有摄像头的鸿某一体机随机抽人使用 (逃
 
-本项目使用了 Qwen 协助开发, 当然还有 CodeGeeX 令人头疼的逆天乱补
+本项目使用了 Qwen & CodeGeeX 协助开发
 
 ## 特点
 
@@ -51,9 +52,22 @@
 
 ## 开发
 
-本项目使用到了 `.NET 6` ，进行开发前请安装对应 SDK，您也可以升级 SDK 版本到 `.NET 8` 或更新版本！
+本项目使用到了 `.NET 6` ，进行开发前请安装对应 SDK，您也可以升级 SDK 版本到 `.NET 8` 或更新版本！但是为了能在 Windows 7 上运行，建议使用 `.NET 6`
+
+你可以通过以下命令拉取源代码:
+
+~~~bash
+git clone https://github.com/WhatDamon/OpenLuckyRandom.git
+~~~
 
 推荐直接使用 Visual Studio 或者 JetBrains Rider 进行开发
+
+如果不希望使用 IDE 构建, 可以通过以下命令进行：
+
+~~~bash
+dotnet restore
+dotnet build -c Release
+~~~
 
 如果愿意，您也可以尝试将本项目向下移植到较为老旧的 `.NET Framework` 上 (一般推荐直接使用最新的 `.NET`, 因为有些组件它不支持)
 

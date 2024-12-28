@@ -314,7 +314,8 @@ namespace OpenLuckyRandom
             // 从摄像头读取一帧图像
             try
             {
-                if (capture.Read(frame))
+                capture.Read(frame);
+                if (frame.Empty())
                 {
                     frameIndex++;
                     bool shouldDetect = (frameIndex - lastDetectionFrameIndex) >= detectionInterval;

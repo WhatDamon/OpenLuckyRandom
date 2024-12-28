@@ -1,4 +1,5 @@
 using Serilog;
+using System.Reflection;
 
 namespace OpenLuckyRandom
 {
@@ -18,7 +19,7 @@ namespace OpenLuckyRandom
             // see https://aka.ms/applicationconfiguration.
             try
             {
-                Log.Information("Starting OpenLuckyRandom");
+                Log.Information($"Starting OpenLuckyRandom {Assembly.GetExecutingAssembly().GetName().Version}; {Misc.Runtime.GetArch()}; {(Misc.Runtime.IsDebug() ? "Debug" : "Release")}");
                 Application.SetHighDpiMode(HighDpiMode.SystemAware);
                 ApplicationConfiguration.Initialize();
                 Application.Run(new WndMain());
